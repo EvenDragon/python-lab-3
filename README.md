@@ -1,63 +1,89 @@
-# Шаблон репозитория, для успешной сдачи лабораторных работ.
+# About this project
 
-## Введение
-Данный шаблон является примером оформления кода для сдачи лабораторных работ.
-Рекомендуется  строго его придерживаться во избежания проблем при сдаче и понижения баллов
+This is my third Python project. It is a package for managing a media library containing music, images and videos. Media items are described using dataclasses and stored in a catalog.
 
+## Prerequisites
 
-## Структура проекта
+* Python 3.12 or newer
+* uv
+* pytest for tests
+* pre-commit for code checks
 
- <pre>
-    .
-    ├── lab<# лабораторной работы>             # Кодовая база вашей лабораторной работы
-    │   ├── src/                               # Исходный код
-    │   ├── tests/                             # Unit тесты
-    │   ├── uv.lock                            # зависимости вашего проекта
-    │   ├── report.pdf                         # Отчет
-    │   ├── .gitignore                         # git ignore файл
-    │   ├──.pre-commit-config.yaml             # Средства автоматизации проверки кодстайла
-    │   ├── README.md                          # Описание вашего проекта, с описанием файлов и с титульником о том,
-                                               # что и какая задача
-</pre>
+Install the project and its dependencies from the project directory:
 
-В папке [src](./src) лежат файлы с реализацией задачи заданной в лабораторной работе. Обязательным файлом является файл
-[main.py](./src/main.py) в котором описана точка входа в приложение - функция **main**. Требования к коду:
-- Переменные, функции и модули именуются по [**snake_case**](https://realpython.com/ref/glossary/snake-case/)
-- Константы должны быть вынесены в файл **constants.py** и именовановаться с помощию символов в верхнем регистре
-- Классы должны именоваться в [**PascalCase**](https://habr.com/ru/articles/724556/)
-- Имена сущностей должны быть осмысленные и содержательные
-- Все отступы должны быть консистентны: 1 TAB = 4 spaces
-- Весь функционал должен быть описан в функциях и в классах. Не допускается писать весь в глобальном скоупе или в одной функции
-- К каждой функции должны быть описаны  [**docstring**](https://peps.python.org/pep-0257/) и аннотации к аргументам и выходным параметрам функций.
-
-В качестве референса проще cходу соблюдать [**PEP8**](https://peps.python.org/pep-0008/) и использовать IDE c готовой поддержкой:
-например PyCharm или VSCode c настроенными плагинами.
-В ходе попыток запушить код в репозиторий ваш код будет проходить проверку статическим анализатором [**mypy**](https://mypy-lang.org/)
-а также с встроенным в [**ruff**](https://astral.sh/ruff) на предмет нарушения код стайла. При работе с кодовой базой
-всю работу необходимо выполнять в [виртуальном окружении](https://docs.python.org/3/tutorial/venv.html)
-
-
-В папке [tests](./tests) лежат [unit тесты](https://tproger.ru/articles/testiruem-na-python-unittest-i-pytest-instrukcija-dlja-nachinajushhih) для проверки функциональности программы или ее частей.
-Рекомендуется использовать pytest. Также название тестов должно быть осмысленно и содержать определение проверямой части.
-Базовые соглашения pytest можно посмотреть [здесь](https://www.qabash.com/pytest-default-naming-conventions-guide/).
-Рекомендуется проверять не только успешные кейсы, но и краевые условия и кейсы в которых была допущена ошибка (неудачные кейсы).
-
-В качестве пакетного менджера в данном шаблоне/репозитории используется [uv](https://github.com/astral-sh/uv).
-Можно использовать и [стандартные виртальные окружения](https://docs.python.org/3/library/venv.html). В таком случае необходимо добавить в репозиторий `requirements.txt`.
-Это достигается командой
-```shell
-pip freeze > requirements.txt
+```bash
+uv sync
 ```
-Также разрешается использовать [`poetry`](https://python-poetry.org/)
-## Как работать с репозиторием и шаблонами
-1. Необходимо создать репозиторий из этого шаблона. Посмотреть можно [здесь](https://docs.github.com/ru/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)
-2. Склонировать или спуллить его к себе на машину командами `git pull` или `git clone`
-3. Создать виртуальное окружение:
 
-    a. Для uv прописать команду `uv venv`. Затем прописать `.venv/bin/activate` в терминале
+## How to use it
 
-    b. Для обычного python `python -m venv <имя директории где будет храниться папка .venv>`. Затем прописать `.venv/bin/activate` в терминале
-4. Установить [`pre-commit`](https://pre-commit.com/). Для этого достаточно ввести команду `pip install pre-commit`
-5. Выполнить команду `pre-commit install`
-6. При запушивании в репозиторий необходимо правильно составлять сообщения коммита. Правила можно прочитать [здесь](https://github.com/RomuloOliveira/commit-messages-guide/blob/master/README_ru-RU.md)
-7. **Внимательно** читайте то, что пишется при попытке коммита, если исправили ошибки нужно заново добавить отредактированные файлы в гит и попробовать коммитнуть
+The package is used through Python imports.
+
+Create a media item and add it to a catalog:
+
+```python
+from catalog.catalog import Catalog
+from catalog.models import Category, MediaItem
+
+catalog = Catalog()
+
+item = MediaItem(
+    id="1",
+    name="Chippin' In",
+    category=Category.MUSIC,
+    year=2019,
+    size=5_000_000,
+    author="SAMURAI",
+)
+
+catalog.add(item)
+```
+
+### Examples
+
+Get a media item by its ID:
+
+```python
+item = catalog.get("1")
+print(item.name)
+```
+
+Remove a media item:
+
+```python
+catalog.remove("1")
+```
+
+### Media item limits
+
+Each media item contains an ID, name, category, year, size and author.
+
+Available categories:
+
+* Music: `Category.MUSIC`
+* Images: `Category.IMAGE`
+* Videos: `Category.VIDEO`
+
+Names and authors cannot be empty. The year must be between 1900 and the current year. Size is measured in bytes and must be a positive integer.
+
+Duplicate IDs are not allowed. Getting or removing an item with an unknown ID raises `MediaItemNotFound`. Adding an item with an existing ID raises `IDDuplicate`. Invalid media item fields raise `WrongEntity`.
+
+## Tests
+
+Run all tests:
+
+```bash
+uv run python -m pytest -v
+```
+
+Run code checks:
+
+```bash
+uv run pre-commit run --all-files
+```
+
+### Few words about the catalog and validation
+
+MediaItem uses a dataclass to describe media objects. Fields are validated in __post_init__ when an object is created.
+
+The catalog stores objects in a dictionary with IDs as keys. Each catalog has its own dictionary. Custom exceptions inherit from CatalogError.

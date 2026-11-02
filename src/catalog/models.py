@@ -6,14 +6,14 @@ from catalog.errors import WrongEntity
 
 
 class Category(Enum):
-    MUSIC = "Music",
-    IMAGE = "Image",
+    MUSIC = "Music"
+    IMAGE = "Image"
     VIDEO = "Video"
 
 
 @dataclass
 class MediaItem:
-    id: int
+    id: str
     name: str
     category: Category
     year: int
@@ -22,8 +22,10 @@ class MediaItem:
 
     def __post_init__(self):
         """Validate media item fields"""
-        if type(self.id) is not int:
-            raise WrongEntity("Media item id must be an integer")
+        if type(self.id) is not str:
+            raise WrongEntity("Media item id must be a string")
+        if self.id.strip() == "":
+            raise WrongEntity("Media item id cannot be an empty string")
 
         if type(self.name) is not str:
             raise WrongEntity("Media item name must be a string")
