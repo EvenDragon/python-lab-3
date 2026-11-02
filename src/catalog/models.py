@@ -1,14 +1,23 @@
 from dataclasses import dataclass
+from enum import Enum
+
+from catalog.constants import MAX_YEAR, MIN_YEAR
 from catalog.errors import WrongEntity
-from catalog.constants import MIN_YEAR, MAX_YEAR
+
+
+class Category(Enum):
+    MUSIC = "Music",
+    IMAGE = "Image",
+    VIDEO = "Video"
+
 
 @dataclass
 class MediaItem:
     id: int
     name: str
-    category: str
+    category: Category
     year: int
-    size: int
+    size: int   #in bytes
     author: str
 
     def __post_init__(self):
@@ -21,10 +30,8 @@ class MediaItem:
         if self.name.strip() == "":
             raise WrongEntity("Media item name cannot be an empty string")
 
-        if type(self.category) is not str:
-            raise WrongEntity("Media item category must be a string")
-        if self.category.strip() == "":
-            raise WrongEntity("Media item category cannot be an empty string")
+        if not isinstance(self.category, Category):
+            raise WrongEntity(f"Media item category must be one of {Category.__members__}")
 
         if type(self.year) is not int:
             raise WrongEntity("Media item year must be an integer")

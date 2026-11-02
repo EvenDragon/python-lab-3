@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 
 MIN_YEAR = 1900
-MAX_YEAR = date.today().year
+MAX_YEAR = datetime.now().year
